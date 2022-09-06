@@ -57,7 +57,7 @@ class HbaseKernel(Kernel):
                             self.output(message)
                             return self.ok()
                         column = [i.strip() for i in v.split(' from ')[0][6:].split(',') if len(i.strip())>0]
-                        table = connection.table(v.split(' from ')[1].strip())
+                        table = self.engine.table(v.split(' from ')[1].strip())
                         scanner = table.scan(columns=column)
                         data = []
                         for r, (key, value) in enumerate(scanner):

@@ -61,9 +61,10 @@ class HbaseKernel(Kernel):
                         scanner = table.scan(columns=column)
                         data = []
                         for r, (key, value) in enumerate(scanner):
+                            value = {i.decode():j.decode() for i, j in value.items()}
                             if r>1000:
                                 break
-                            data.append(dict(**{'key':key.decode()}, **{col:value.get(col, b'').decode() for col in column}))
+                            data.append(dict(**{'key':key.decode()}, **{col:value.get(col, '') for col in column}))
                         output = pd.DataFrame(data).to_html()
                     else:
                         output = 'Hbase SQL Syntax errors, please check SQL Syntax.'
